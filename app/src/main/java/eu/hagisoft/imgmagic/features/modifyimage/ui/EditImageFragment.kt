@@ -55,6 +55,7 @@ class EditImageFragment : Fragment() {
             EditImageViewModel.StrokeColor.BLUE -> R.id.image_edit_blue_cta
         }
         binding.imageEditColorsGroup.check(selectedColorButtonId)
+        binding.imageEditSlider.value = state.strokeWidth
     }
 
     private fun handleEvent(event: EditImageViewModel.ViewEvent) {

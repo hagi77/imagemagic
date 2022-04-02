@@ -9,26 +9,23 @@ import kotlinx.coroutines.launch
 
 class LoadImageViewModel(val loadScaledImageUseCase: LoadScaledImageUseCase) : ViewModel() {
 
-    private val _state = MutableStateFlow<ViewState>(ViewState.Idle)
+    private val _state = MutableStateFlow(ViewState(loading = false))
     val state = _state.asStateFlow()
 
     private val _events = MutableSharedFlow<ViewEvent>()
     val events = _events.asSharedFlow()
 
     fun loadImageClicked() {
-        _state.value = ViewState.Loading
+        _state.value = ViewState(loading = true)
 
         viewModelScope.launch {
-            delay(1000)
-            _state.value = ViewState.Idle
+            delay(500)
+            _state.value = ViewState(loading = false)
             _events.emit(ViewEvent.GoToImageEdit)
         }
     }
 
-    sealed class ViewState {
-        object Idle : ViewState()
-        object Loading: ViewState()
-    }
+    data class ViewState(val loading: Boolean)
 
     sealed class ViewEvent {
         object GoToImageEdit: ViewEvent()

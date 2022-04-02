@@ -46,14 +46,7 @@ class LoadImageFragment : Fragment() {
     }
 
     private fun handleState(state: LoadImageViewModel.ViewState) {
-        when (state) {
-            LoadImageViewModel.ViewState.Loading -> {
-                loading(true)
-            }
-            else -> {
-                loading(false)
-            }
-        }
+        loading(state.loading)
     }
 
     private fun loading(loading: Boolean) {

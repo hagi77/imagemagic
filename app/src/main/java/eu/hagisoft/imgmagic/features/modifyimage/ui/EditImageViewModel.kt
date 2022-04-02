@@ -30,10 +30,21 @@ class EditImageViewModel(val loadScaledImageUseCase: LoadScaledImageUseCase) : V
         _state.value = newState
     }
 
-    data class ViewState(val image: Bitmap? = null, val strokeColor: StrokeColor = StrokeColor.BLACK)
+    fun onStrokeWidthChanged(stroke: Float, fromUser: Boolean) {
+        if (fromUser) {
+            val newState = _state.value.copy(strokeWidth = stroke)
+            _state.value = newState
+        }
+    }
+
+    data class ViewState(
+        val image: Bitmap? = null,
+        val strokeColor: StrokeColor = StrokeColor.BLACK,
+        val strokeWidth: Float = 6f
+    )
 
     sealed class ViewEvent {
-        object GoToSaveImage: ViewEvent()
+        object GoToSaveImage : ViewEvent()
     }
 
     enum class StrokeColor {
