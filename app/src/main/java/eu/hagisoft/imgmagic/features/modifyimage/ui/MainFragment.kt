@@ -1,4 +1,4 @@
-package eu.hagisoft.imgmagic.ui.main
+package eu.hagisoft.imgmagic.features.modifyimage.ui
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle

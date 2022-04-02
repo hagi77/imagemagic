@@ -1,8 +1,9 @@
-package eu.hagisoft.imgmagic
+package eu.hagisoft.imgmagic.features.modifyimage
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import eu.hagisoft.imgmagic.ui.main.MainFragment
+import eu.hagisoft.imgmagic.R
+import eu.hagisoft.imgmagic.features.modifyimage.ui.MainFragment
 
 class MainActivity : AppCompatActivity() {
 

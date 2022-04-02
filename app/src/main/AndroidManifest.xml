@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Imgmagic">
         <activity
-            android:name=".MainActivity"
+            android:name="eu.hagisoft.imgmagic.features.modifyimage.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
