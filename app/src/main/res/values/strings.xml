@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">imgmagic</string>
+    <string name="app_name">Image Magic</string>
+    <string name="image_load_cta_label">Tap here to load an image</string>
 </resources>
