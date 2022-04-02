@@ -1,24 +1,45 @@
 package eu.hagisoft.imgmagic.features.modifyimage.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.hagisoft.imgmagic.features.modifyimage.usecases.LoadScaledImageUseCase
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class EditImageViewModel(val loadScaledImageUseCase: LoadScaledImageUseCase) : ViewModel() {
 
-    private val _loading: MutableLiveData<Boolean> = MutableLiveData(false)
-    val loading: LiveData<Boolean> = _loading
+    private val _state = MutableStateFlow(ViewState())
+    val state = _state.asStateFlow()
 
-    fun loadImageClicked() {
-        _loading.value = true
+    private val _events = MutableSharedFlow<ViewEvent>()
+    val events = _events.asSharedFlow()
 
+    fun saveImageClicked() {
         viewModelScope.launch {
-            delay(1000)
-            _loading.value = false
+            _events.emit(ViewEvent.GoToSaveImage)
         }
+    }
+
+    fun clearImageClicked() {
+
+    }
+
+    fun colorClicked(color: StrokeColor) {
+        val newState = _state.value.copy(strokeColor = color)
+        _state.value = newState
+    }
+
+    data class ViewState(val image: Bitmap? = null, val strokeColor: StrokeColor = StrokeColor.BLACK)
+
+    sealed class ViewEvent {
+        object GoToSaveImage: ViewEvent()
+    }
+
+    enum class StrokeColor {
+        YELLOW,
+        BLACK,
+        GREEN,
+        BLUE
     }
 }
