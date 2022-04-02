@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/loadImageFragment">
 
     <fragment
         android:id="@+id/loadImageFragment"
         android:name="eu.hagisoft.imgmagic.features.modifyimage.ui.LoadImageFragment"
-        android:label="LoadImageFragment" />
+        android:label="LoadImageFragment"
+        tools:layout="@layout/load_image_fragment" >
+        <action
+            android:id="@+id/action_loadImageFragment_to_editImageFragment"
+            app:destination="@id/editImageFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editImageFragment"
+        android:name="eu.hagisoft.imgmagic.features.modifyimage.ui.EditImageFragment"
+        android:label="EditImageFragment"
+        tools:layout="@layout/edit_image_fragment" />
 </navigation>
