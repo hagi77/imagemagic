@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import eu.hagisoft.imgmagic.R
+import eu.hagisoft.imgmagic.databinding.LoadImageFragmentBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoadImageFragment : Fragment() {
@@ -16,7 +17,10 @@ class LoadImageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.load_image_fragment, container, false)
+        val binding = LoadImageFragmentBinding.inflate(layoutInflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
+        return binding.root
     }
 
     companion object {
