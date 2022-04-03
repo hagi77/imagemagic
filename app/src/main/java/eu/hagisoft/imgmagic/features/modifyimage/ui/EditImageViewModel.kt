@@ -30,7 +30,9 @@ class EditImageViewModel(val loadScaledImageUseCase: LoadScaledImageUseCase) : V
     }
 
     fun clearImageClicked() {
-
+        viewModelScope.launch {
+            _events.emit(ViewEvent.ClearImage)
+        }
     }
 
     fun colorClicked(color: StrokeColor) {
@@ -56,6 +58,7 @@ class EditImageViewModel(val loadScaledImageUseCase: LoadScaledImageUseCase) : V
 
     sealed class ViewEvent {
         object GoToSaveImage : ViewEvent()
+        object ClearImage : ViewEvent()
     }
 
     enum class StrokeColor(val color: Int) {

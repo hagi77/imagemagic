@@ -4,7 +4,7 @@ import android.graphics.Path
 
 /**
  * Class represents a collection of nodes
- * Caution: this class is not thread safe
+ * CAUTION: this class is not thread safe
  */
 class PathModel(val start: Node, val color: Int, val strokeWidth: Float) {
     var end: Node = start
@@ -17,6 +17,9 @@ class PathModel(val start: Node, val color: Int, val strokeWidth: Float) {
         count++
     }
 
+    /**
+     * Get a list of all nodes. May be useful e.g. for serializing and persisting
+     */
     fun getNodes(): List<Node> {
         val list = ArrayList<Node>(count)
         var node = start

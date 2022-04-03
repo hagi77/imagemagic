@@ -7,12 +7,11 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatImageView
-import eu.hagisoft.imgmagic.features.modifyimage.models.Node
-import eu.hagisoft.imgmagic.features.modifyimage.models.PathModel
+import eu.hagisoft.imgmagic.features.modifyimage.models.Paths
 
 class MagicImageView : AppCompatImageView {
 
-    private var pathModel: PathModel? = null
+    private val paths = Paths()
 
     private var strokeWidth = DEFAULT_STROKE_WIDTH
 
@@ -42,33 +41,37 @@ class MagicImageView : AppCompatImageView {
         strokeColor = color
     }
 
+    fun clear() {
+        paths.clear()
+        invalidate()
+    }
+
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         event?.let { _event ->
-            when (_event.actionMasked) {
+            return when (_event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
-                    pathModel = PathModel(Node(_event.x, _event.y), strokeColor, strokeWidth)
+                    paths.newPath(_event.x, _event.y, strokeColor, strokeWidth)
                     invalidate()
+                    true
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    pathModel?.add(Node(_event.x, _event.y))
+                    paths.addToCurrentPath(_event.x, _event.y)
                     invalidate()
-                }
-                MotionEvent.ACTION_UP -> {
-                    pathModel = null
+                    true
                 }
                 else -> {
-
+                    false
                 }
             }
         }
-        return true
+        return false
     }
 
     override fun draw(canvas: Canvas?) {
         super.draw(canvas)
-        pathModel?.let {
-            updatePaint(it.color, it.strokeWidth)
-            canvas?.drawPath(it.toPath(), paint)
+        paths.getPaths().forEach {
+            updatePaint(it.second, it.third)
+            canvas?.drawPath(it.first, paint)
         }
     }
 

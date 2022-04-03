@@ -67,6 +67,8 @@ class EditImageFragment : Fragment() {
     }
 
     private fun handleEvent(event: EditImageViewModel.ViewEvent) {
-
+        when (event) {
+            EditImageViewModel.ViewEvent.ClearImage -> binding.imageEditImageview.clear()
+        }
     }
 }
