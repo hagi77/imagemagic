@@ -1,12 +1,13 @@
 package eu.hagisoft.imgmagic.features.modifyimage.ui
 
 import android.graphics.Bitmap
+import android.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import eu.hagisoft.imgmagic.R
 import eu.hagisoft.imgmagic.features.modifyimage.usecases.LoadScaledImageUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlin.math.pow
 
 class EditImageViewModel(val loadScaledImageUseCase: LoadScaledImageUseCase) : ViewModel() {
 
@@ -39,7 +40,7 @@ class EditImageViewModel(val loadScaledImageUseCase: LoadScaledImageUseCase) : V
 
     fun onStrokeWidthChanged(stroke: Float, fromUser: Boolean) {
         if (fromUser) {
-            val newState = _state.value.copy(strokeWidth = stroke)
+            val newState = _state.value.copy(strokeValue = stroke)
             _state.value = newState
         }
     }
@@ -47,17 +48,20 @@ class EditImageViewModel(val loadScaledImageUseCase: LoadScaledImageUseCase) : V
     data class ViewState(
         val image: Bitmap? = null,
         val strokeColor: StrokeColor = StrokeColor.BLACK,
-        val strokeWidth: Float = 6f
-    )
+        val strokeValue: Float = 6f
+    ) {
+        val strokeWidth: Float
+            get() = strokeValue.pow(2)
+    }
 
     sealed class ViewEvent {
         object GoToSaveImage : ViewEvent()
     }
 
-    enum class StrokeColor {
-        YELLOW,
-        BLACK,
-        GREEN,
-        BLUE
+    enum class StrokeColor(val color: Int) {
+        YELLOW(Color.YELLOW),
+        BLACK(Color.BLACK),
+        GREEN(Color.GREEN),
+        BLUE(Color.BLUE)
     }
 }

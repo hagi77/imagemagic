@@ -55,9 +55,14 @@ class EditImageFragment : Fragment() {
             EditImageViewModel.StrokeColor.BLUE -> R.id.image_edit_blue_cta
         }
         binding.imageEditColorsGroup.check(selectedColorButtonId)
-        binding.imageEditSlider.value = state.strokeWidth
-        state.image?.let {
-            binding.imageEditImageview.setImageBitmap(it)
+        binding.imageEditSlider.value = state.strokeValue
+
+        with (binding.imageEditImageview) {
+            setStrokeColor(state.strokeColor.color)
+            setStrokeWidth(state.strokeWidth)
+            state.image?.let {
+                setImageBitmap(it)
+            }
         }
     }
 

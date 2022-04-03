@@ -11,6 +11,7 @@ class PathModel(val start: Node, val color: Int, val strokeWidth: Float) {
     private var count = 1
 
     fun add(node: Node) {
+        if (!end.isSignificantlyDifferentFrom(node)) return
         end.next = node
         end = node
         count++
@@ -19,7 +20,7 @@ class PathModel(val start: Node, val color: Int, val strokeWidth: Float) {
     fun getNodes(): List<Node> {
         val list = ArrayList<Node>(count)
         var node = start
-        while(node.hasNext) {
+        while (node.hasNext) {
             list.add(node)
             node = node.next!!
         }
@@ -29,7 +30,7 @@ class PathModel(val start: Node, val color: Int, val strokeWidth: Float) {
     fun toPath(): Path {
         val path = Path().apply { moveTo(start.x, start.y) }
         var node = start
-        while(node.hasNext) {
+        while (node.hasNext) {
             path.lineTo(node.next!!.x, node.next!!.y)
             node = node.next!!
         }
