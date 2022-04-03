@@ -1,13 +1,13 @@
 package eu.hagisoft.imgmagic.features.modifyimage.ui
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import eu.hagisoft.imgmagic.features.modifyimage.usecases.LoadScaledImageUseCase
-import kotlinx.coroutines.delay
+import eu.hagisoft.imgmagic.features.modifyimage.usecases.ScaleImageUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class LoadImageViewModel(val loadScaledImageUseCase: LoadScaledImageUseCase) : ViewModel() {
+class LoadImageViewModel(val scaleImageUseCase: ScaleImageUseCase) : ViewModel() {
 
     private val _state = MutableStateFlow(ViewState(loading = false))
     val state = _state.asStateFlow()
@@ -16,10 +16,15 @@ class LoadImageViewModel(val loadScaledImageUseCase: LoadScaledImageUseCase) : V
     val events = _events.asSharedFlow()
 
     fun loadImageClicked() {
-        _state.value = ViewState(loading = true)
-
         viewModelScope.launch {
-            delay(500)
+            _events.emit(ViewEvent.ChooseImage)
+        }
+    }
+
+    fun onImageChosen(uri: Uri) {
+        viewModelScope.launch {
+            _state.value = ViewState(loading = true)
+            scaleImageUseCase(uri)
             _state.value = ViewState(loading = false)
             _events.emit(ViewEvent.GoToImageEdit)
         }
@@ -28,6 +33,7 @@ class LoadImageViewModel(val loadScaledImageUseCase: LoadScaledImageUseCase) : V
     data class ViewState(val loading: Boolean)
 
     sealed class ViewEvent {
+        object ChooseImage: ViewEvent()
         object GoToImageEdit: ViewEvent()
     }
 }

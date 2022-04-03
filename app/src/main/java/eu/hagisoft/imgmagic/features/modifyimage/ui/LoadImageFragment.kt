@@ -1,5 +1,9 @@
 package eu.hagisoft.imgmagic.features.modifyimage.ui
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,7 +38,7 @@ class LoadImageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 launch {
                     viewModel.state.collect { handleState(it) }
                 }
@@ -62,9 +66,8 @@ class LoadImageFragment : Fragment() {
 
     private fun handleEvent(event: LoadImageViewModel.ViewEvent) {
         when (event) {
-            LoadImageViewModel.ViewEvent.GoToImageEdit -> {
-                gotoEditImage()
-            }
+            LoadImageViewModel.ViewEvent.GoToImageEdit -> gotoEditImage()
+            LoadImageViewModel.ViewEvent.ChooseImage -> selectImage()
         }
     }
 
@@ -72,5 +75,25 @@ class LoadImageFragment : Fragment() {
         LoadImageFragmentDirections.actionLoadImageFragmentToEditImageFragment().let {
             findNavController().navigate(it)
         }
+    }
+
+    private fun selectImage() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            type = "image/*"
+            addCategory(Intent.CATEGORY_OPENABLE)
+        }
+        startActivityForResult(intent, REQUEST_IMAGE_OPEN)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_IMAGE_OPEN && resultCode == Activity.RESULT_OK) {
+            data?.data?.let {
+                viewModel.onImageChosen(it)
+            }
+        }
+    }
+
+    companion object {
+        const val REQUEST_IMAGE_OPEN = 1
     }
 }

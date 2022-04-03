@@ -4,12 +4,13 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import eu.hagisoft.imgmagic.features.modifyimage.usecases.LoadScaledImageUseCase
+import eu.hagisoft.imgmagic.features.modifyimage.repositories.ImagesRepository
+import eu.hagisoft.imgmagic.features.modifyimage.usecases.ScaleImageUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlin.math.pow
 
-class EditImageViewModel(val loadScaledImageUseCase: LoadScaledImageUseCase) : ViewModel() {
+class EditImageViewModel(imagesRepository: ImagesRepository) : ViewModel() {
 
     private val _state = MutableStateFlow(ViewState())
     val state = _state.asStateFlow()
@@ -18,7 +19,7 @@ class EditImageViewModel(val loadScaledImageUseCase: LoadScaledImageUseCase) : V
     val events = _events.asSharedFlow()
 
     init {
-        val bitmap = loadScaledImageUseCase()
+        val bitmap = imagesRepository.getImagePreview()
         val copy = _state.value.copy(image = bitmap)
         _state.value = copy
     }

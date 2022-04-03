@@ -32,16 +32,12 @@ class EditImageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 launch {
-                    viewModel.state.collect {
-                        handleState(it)
-                    }
+                    viewModel.state.collect { handleState(it) }
                 }
                 launch {
-                    viewModel.events.collect {
-                        handleEvent(it)
-                    }
+                    viewModel.events.collect { handleEvent(it) }
                 }
             }
         }
