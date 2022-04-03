@@ -10,7 +10,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val modifyImageModule = module {
-    single<ImagesRepository> { ImagesRepositoryImpl() }
+    single<ImagesRepository> { ImagesRepositoryImpl(get()) }
     single<LoadScaledImageUseCase> { LoadScaledImageUseCaseImpl(get()) }
 
     viewModel { LoadImageViewModel(get()) }

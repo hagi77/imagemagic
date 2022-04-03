@@ -3,6 +3,7 @@ package eu.hagisoft.imgmagic.features.modifyimage.ui
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import eu.hagisoft.imgmagic.R
 import eu.hagisoft.imgmagic.features.modifyimage.usecases.LoadScaledImageUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -14,6 +15,12 @@ class EditImageViewModel(val loadScaledImageUseCase: LoadScaledImageUseCase) : V
 
     private val _events = MutableSharedFlow<ViewEvent>()
     val events = _events.asSharedFlow()
+
+    init {
+        val bitmap = loadScaledImageUseCase()
+        val copy = _state.value.copy(image = bitmap)
+        _state.value = copy
+    }
 
     fun saveImageClicked() {
         viewModelScope.launch {

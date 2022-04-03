@@ -56,6 +56,9 @@ class EditImageFragment : Fragment() {
         }
         binding.imageEditColorsGroup.check(selectedColorButtonId)
         binding.imageEditSlider.value = state.strokeWidth
+        state.image?.let {
+            binding.imageEditImageview.setImageBitmap(it)
+        }
     }
 
     private fun handleEvent(event: EditImageViewModel.ViewEvent) {
