@@ -7,9 +7,11 @@ import android.graphics.Paint
 import android.provider.MediaStore
 import eu.hagisoft.imgmagic.features.modifyimage.models.Paths
 import eu.hagisoft.imgmagic.features.modifyimage.repositories.ImagesRepository
+import kotlin.Result.Companion.failure
+import kotlin.Result.Companion.success
 
 interface ApplyPathToImageUseCase {
-    suspend operator fun invoke(paths: Paths)
+    suspend operator fun invoke(paths: Paths): Result<String>
 }
 
 class ApplyPathToImageUseCaseImpl(
@@ -23,8 +25,8 @@ class ApplyPathToImageUseCaseImpl(
         strokeCap = Paint.Cap.ROUND
     }
 
-    override suspend fun invoke(paths: Paths) {
-        imagesRepository.getImageFile()?.let {
+    override suspend fun invoke(paths: Paths): Result<String> {
+        val uri = imagesRepository.getImageFile()?.let {
             val options = BitmapFactory.Options()
             options.inJustDecodeBounds = false
             options.inMutable = true
@@ -41,6 +43,12 @@ class ApplyPathToImageUseCaseImpl(
                 "modified bitmap",
                 "modified bitmap description"
             )
+        }
+
+        return if (uri.isNullOrEmpty()) {
+            throw IllegalStateException()
+        } else {
+            success(uri)
         }
     }
 

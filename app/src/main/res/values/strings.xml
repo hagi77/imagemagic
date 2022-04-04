@@ -4,6 +4,8 @@
     <string name="image_save_success_label">SUCCESS! You have saved the image to the to the images folder</string>
     <string name="image_save_fail_label">Image saving failed. Try again</string>
     <string name="image_load_fail_label">Image loading failed. Try again</string>
+    <string name="image_load_no_permission_fail_label">Image loading failed. Read permission not granted</string>
+    <string name="image_write_no_permission_fail_label">Image writing failed. Read permission not granted</string>
     <string name="black_color">Black</string>
     <string name="blue_color">Blue</string>
     <string name="yellow_color">Yellow</string>

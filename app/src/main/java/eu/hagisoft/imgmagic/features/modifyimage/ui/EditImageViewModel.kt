@@ -57,7 +57,7 @@ class EditImageViewModel(
         viewModelScope.launch {
             setInProgress(true)
 
-            runCatching { applyPathToImageUseCase.invoke(paths) }
+            runCatching { applyPathToImageUseCase(paths) }
                 .onSuccess {
                     _events.emit(ViewEvent.ImageSavingSuccess)
                     _events.emit(ViewEvent.Finish)
