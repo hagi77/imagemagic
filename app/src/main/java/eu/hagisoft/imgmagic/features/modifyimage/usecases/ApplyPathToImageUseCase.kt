@@ -7,7 +7,6 @@ import android.graphics.Paint
 import android.provider.MediaStore
 import eu.hagisoft.imgmagic.features.modifyimage.models.Paths
 import eu.hagisoft.imgmagic.features.modifyimage.repositories.ImagesRepository
-import kotlin.Result.Companion.failure
 import kotlin.Result.Companion.success
 
 interface ApplyPathToImageUseCase {
