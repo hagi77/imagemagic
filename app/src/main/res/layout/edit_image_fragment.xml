@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -10,109 +12,120 @@
             type="eu.hagisoft.imgmagic.features.modifyimage.ui.EditImageViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/main"
+    <ViewAnimator
+        android:id="@+id/image_edit_view_animator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:inAnimation="@android:anim/fade_in"
+        android:outAnimation="@android:anim/fade_out"
         tools:context=".features.modifyimage.ui.LoadImageFragment">
 
-        <eu.hagisoft.imgmagic.features.modifyimage.ui.MagicImageView
-            android:id="@+id/image_edit_imageview"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:importantForAccessibility="no"
-            app:layout_constraintBottom_toTopOf="@id/image_edit_guideline"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/image_edit_guideline"
+            <eu.hagisoft.imgmagic.features.modifyimage.ui.MagicImageView
+                android:id="@+id/image_edit_imageview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:importantForAccessibility="no"
+                android:scaleType="fitCenter"
+                app:layout_constraintBottom_toTopOf="@id/image_edit_guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/image_edit_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.66" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/image_edit_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_16"
+                android:stepSize="1.0"
+                android:valueFrom="1.0"
+                android:valueTo="11.0"
+                app:addOnChangeListener="@{(_, value, fromUser) -> viewModel.onStrokeWidthChanged(value, fromUser)}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image_edit_guideline" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/image_edit_colors_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_16"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image_edit_slider"
+                app:singleSelection="true">
+
+                <Button
+                    android:id="@+id/image_edit_black_cta"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:onClick="@{() -> viewModel.colorClicked(StrokeColor.BLACK)}"
+                    android:text="@string/black_color" />
+
+                <Button
+                    android:id="@+id/image_edit_yellow_cta"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:onClick="@{() -> viewModel.colorClicked(StrokeColor.YELLOW)}"
+                    android:text="@string/yellow_color" />
+
+                <Button
+                    android:id="@+id/image_edit_green_cta"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:onClick="@{() -> viewModel.colorClicked(StrokeColor.GREEN)}"
+                    android:text="@string/green_color" />
+
+                <Button
+                    android:id="@+id/image_edit_blue_cta"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:onClick="@{() -> viewModel.colorClicked(StrokeColor.BLUE)}"
+                    android:text="@string/blue_color" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <Button
+                android:id="@+id/image_edit_save_cta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_16"
+                android:onClick="@{() -> viewModel.saveImageClicked()}"
+                android:text="@string/image_save_cta_label"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image_edit_colors_group" />
+
+            <Button
+                android:id="@+id/image_edit_clear_cta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_16"
+                android:onClick="@{() -> viewModel.clearImageClicked()}"
+                android:text="@string/image_clear_cta_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image_edit_colors_group" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ProgressBar
+            android:id="@+id/image_load_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.66" />
-
-        <com.google.android.material.slider.Slider
-            android:id="@+id/image_edit_slider"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:addOnChangeListener="@{(_, value, fromUser) -> viewModel.onStrokeWidthChanged(value, fromUser)}"
-            android:layout_margin="@dimen/margin_16"
-            android:stepSize="1.0"
-            android:valueFrom="1.0"
-            android:valueTo="11.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/image_edit_guideline" />
-
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/image_edit_colors_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_16"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_edit_slider"
-            app:singleSelection="true">
-
-            <Button
-                android:id="@+id/image_edit_black_cta"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:onClick="@{() -> viewModel.colorClicked(StrokeColor.BLACK)}"
-                android:text="@string/black_color" />
-
-            <Button
-                android:id="@+id/image_edit_yellow_cta"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:onClick="@{() -> viewModel.colorClicked(StrokeColor.YELLOW)}"
-                android:text="@string/yellow_color" />
-
-            <Button
-                android:id="@+id/image_edit_green_cta"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:onClick="@{() -> viewModel.colorClicked(StrokeColor.GREEN)}"
-                android:text="@string/green_color" />
-
-            <Button
-                android:id="@+id/image_edit_blue_cta"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:onClick="@{() -> viewModel.colorClicked(StrokeColor.BLUE)}"
-                android:text="@string/blue_color" />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
-
-        <Button
-            android:id="@+id/image_edit_save_cta"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_16"
-            android:onClick="@{() -> viewModel.saveImageClicked()}"
-            android:text="@string/image_save_cta_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/image_edit_colors_group" />
-
-        <Button
-            android:id="@+id/image_edit_clear_cta"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_16"
-            android:onClick="@{() -> viewModel.clearImageClicked()}"
-            android:text="@string/image_clear_cta_label"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/image_edit_colors_group" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_gravity="center" />
+    </ViewAnimator>
 </layout>

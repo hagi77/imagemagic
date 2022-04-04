@@ -11,7 +11,7 @@ import eu.hagisoft.imgmagic.features.modifyimage.models.Paths
 
 class MagicImageView : AppCompatImageView {
 
-    private val paths = Paths()
+    private lateinit var paths : Paths
 
     private var strokeWidth = DEFAULT_STROKE_WIDTH
 
@@ -44,6 +44,13 @@ class MagicImageView : AppCompatImageView {
     fun clear() {
         paths.clear()
         invalidate()
+    }
+
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+        if (!::paths.isInitialized) {
+            paths = Paths(width, height)
+        }
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -79,6 +86,8 @@ class MagicImageView : AppCompatImageView {
         paint.color = color
         paint.strokeWidth = strokeWidth
     }
+
+    fun getPaths(): Paths = paths
 
     companion object {
         private const val DEFAULT_STROKE_WIDTH = 25f

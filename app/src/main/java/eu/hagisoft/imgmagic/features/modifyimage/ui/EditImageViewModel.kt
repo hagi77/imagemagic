@@ -4,13 +4,18 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import eu.hagisoft.imgmagic.features.modifyimage.models.Paths
 import eu.hagisoft.imgmagic.features.modifyimage.repositories.ImagesRepository
-import eu.hagisoft.imgmagic.features.modifyimage.usecases.ScaleImageUseCase
+import eu.hagisoft.imgmagic.features.modifyimage.usecases.ApplyPathToImageUseCase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlin.math.pow
 
-class EditImageViewModel(imagesRepository: ImagesRepository) : ViewModel() {
+class EditImageViewModel(
+    imagesRepository: ImagesRepository,
+    private val applyPathToImageUseCase: ApplyPathToImageUseCase
+) : ViewModel() {
 
     private val _state = MutableStateFlow(ViewState())
     val state = _state.asStateFlow()
@@ -26,7 +31,7 @@ class EditImageViewModel(imagesRepository: ImagesRepository) : ViewModel() {
 
     fun saveImageClicked() {
         viewModelScope.launch {
-            _events.emit(ViewEvent.GoToSaveImage)
+            _events.emit(ViewEvent.SaveImage)
         }
     }
 
@@ -48,18 +53,37 @@ class EditImageViewModel(imagesRepository: ImagesRepository) : ViewModel() {
         }
     }
 
+    fun performImageSaving(paths: Paths) {
+        viewModelScope.launch {
+            setInProgress(true)
+            delay(500)
+            applyPathToImageUseCase.invoke(paths)
+            setInProgress(false)
+            _events.emit(ViewEvent.ImageSavingSuccess)
+            _events.emit(ViewEvent.Finish)
+        }
+    }
+
+    private fun setInProgress(progress: Boolean) {
+        val newState = _state.value.copy(progress = progress)
+        _state.value = newState
+    }
+
     data class ViewState(
         val image: Bitmap? = null,
         val strokeColor: StrokeColor = StrokeColor.BLACK,
-        val strokeValue: Float = 6f
+        val strokeValue: Float = 6f,
+        val progress: Boolean = false
     ) {
         val strokeWidth: Float
             get() = strokeValue.pow(2)
     }
 
     sealed class ViewEvent {
-        object GoToSaveImage : ViewEvent()
+        object SaveImage : ViewEvent()
+        object ImageSavingSuccess : ViewEvent()
         object ClearImage : ViewEvent()
+        object Finish : ViewEvent()
     }
 
     enum class StrokeColor(val color: Int) {

@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import eu.hagisoft.imgmagic.R
 import eu.hagisoft.imgmagic.databinding.EditImageFragmentBinding
 import kotlinx.coroutines.flow.collect
@@ -50,21 +52,35 @@ class EditImageFragment : Fragment() {
             EditImageViewModel.StrokeColor.GREEN -> R.id.image_edit_green_cta
             EditImageViewModel.StrokeColor.BLUE -> R.id.image_edit_blue_cta
         }
+
         binding.imageEditColorsGroup.check(selectedColorButtonId)
         binding.imageEditSlider.value = state.strokeValue
 
-        with (binding.imageEditImageview) {
+        with(binding.imageEditImageview) {
             setStrokeColor(state.strokeColor.color)
             setStrokeWidth(state.strokeWidth)
             state.image?.let {
                 setImageBitmap(it)
             }
         }
+
+        binding.imageEditViewAnimator.displayedChild = if (state.progress) 1 else 0
     }
 
     private fun handleEvent(event: EditImageViewModel.ViewEvent) {
         when (event) {
             EditImageViewModel.ViewEvent.ClearImage -> binding.imageEditImageview.clear()
+            EditImageViewModel.ViewEvent.SaveImage -> viewModel.performImageSaving(binding.imageEditImageview.getPaths())
+            EditImageViewModel.ViewEvent.Finish -> findNavController().popBackStack()
+            EditImageViewModel.ViewEvent.ImageSavingSuccess -> showSuccessMessage()
         }
+    }
+
+    private fun showSuccessMessage() {
+        Toast.makeText(
+            context,
+            R.string.image_save_success_label,
+            Toast.LENGTH_LONG
+        ).show()
     }
 }

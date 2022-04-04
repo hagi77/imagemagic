@@ -9,7 +9,7 @@
         android:id="@+id/loadImageFragment"
         android:name="eu.hagisoft.imgmagic.features.modifyimage.ui.LoadImageFragment"
         android:label="LoadImageFragment"
-        tools:layout="@layout/load_image_fragment" >
+        tools:layout="@layout/load_image_fragment">
         <action
             android:id="@+id/action_loadImageFragment_to_editImageFragment"
             app:destination="@id/editImageFragment" />

@@ -7,7 +7,7 @@ import eu.hagisoft.imgmagic.features.modifyimage.usecases.ScaleImageUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class LoadImageViewModel(val scaleImageUseCase: ScaleImageUseCase) : ViewModel() {
+class LoadImageViewModel(private val scaleImageUseCase: ScaleImageUseCase) : ViewModel() {
 
     private val _state = MutableStateFlow(ViewState(loading = false))
     val state = _state.asStateFlow()
