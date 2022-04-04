@@ -24,16 +24,20 @@ class LoadImageViewModel(private val scaleImageUseCase: ScaleImageUseCase) : Vie
     fun onImageChosen(uri: Uri) {
         viewModelScope.launch {
             _state.value = ViewState(loading = true)
-            scaleImageUseCase(uri)
+
+            runCatching { scaleImageUseCase(uri) }
+                .onSuccess { _events.emit(ViewEvent.GoToImageEdit) }
+                .onFailure { _events.emit(ViewEvent.ImageLoadingError) }
+
             _state.value = ViewState(loading = false)
-            _events.emit(ViewEvent.GoToImageEdit)
         }
     }
 
     data class ViewState(val loading: Boolean)
 
     sealed class ViewEvent {
-        object ChooseImage: ViewEvent()
-        object GoToImageEdit: ViewEvent()
+        object ChooseImage : ViewEvent()
+        object GoToImageEdit : ViewEvent()
+        object ImageLoadingError : ViewEvent()
     }
 }

@@ -2,17 +2,17 @@ package eu.hagisoft.imgmagic.features.modifyimage.ui
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import eu.hagisoft.imgmagic.R
 import eu.hagisoft.imgmagic.databinding.LoadImageFragmentBinding
 import eu.hagisoft.imgmagic.utils.hide
 import eu.hagisoft.imgmagic.utils.show
@@ -68,7 +68,12 @@ class LoadImageFragment : Fragment() {
         when (event) {
             LoadImageViewModel.ViewEvent.GoToImageEdit -> gotoEditImage()
             LoadImageViewModel.ViewEvent.ChooseImage -> selectImage()
+            LoadImageViewModel.ViewEvent.ImageLoadingError -> showErrorMessage()
         }
+    }
+
+    private fun showErrorMessage() {
+        Toast.makeText(context, R.string.image_load_fail_label, Toast.LENGTH_LONG).show()
     }
 
     private fun gotoEditImage() {

@@ -73,7 +73,16 @@ class EditImageFragment : Fragment() {
             EditImageViewModel.ViewEvent.SaveImage -> viewModel.performImageSaving(binding.imageEditImageview.getPaths())
             EditImageViewModel.ViewEvent.Finish -> findNavController().popBackStack()
             EditImageViewModel.ViewEvent.ImageSavingSuccess -> showSuccessMessage()
+            EditImageViewModel.ViewEvent.ImageSavingFailure -> showFailureMessage()
         }
+    }
+
+    private fun showFailureMessage() {
+        Toast.makeText(
+            context,
+            R.string.image_save_fail_label,
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     private fun showSuccessMessage() {

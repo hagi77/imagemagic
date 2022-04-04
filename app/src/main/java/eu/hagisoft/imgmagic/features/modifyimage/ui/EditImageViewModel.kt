@@ -56,11 +56,17 @@ class EditImageViewModel(
     fun performImageSaving(paths: Paths) {
         viewModelScope.launch {
             setInProgress(true)
-            delay(500)
-            applyPathToImageUseCase.invoke(paths)
+
+            runCatching { applyPathToImageUseCase.invoke(paths) }
+                .onSuccess {
+                    _events.emit(ViewEvent.ImageSavingSuccess)
+                    _events.emit(ViewEvent.Finish)
+                }
+                .onFailure {
+                    _events.emit(ViewEvent.ImageSavingFailure)
+                }
+
             setInProgress(false)
-            _events.emit(ViewEvent.ImageSavingSuccess)
-            _events.emit(ViewEvent.Finish)
         }
     }
 
@@ -82,6 +88,7 @@ class EditImageViewModel(
     sealed class ViewEvent {
         object SaveImage : ViewEvent()
         object ImageSavingSuccess : ViewEvent()
+        object ImageSavingFailure : ViewEvent()
         object ClearImage : ViewEvent()
         object Finish : ViewEvent()
     }
