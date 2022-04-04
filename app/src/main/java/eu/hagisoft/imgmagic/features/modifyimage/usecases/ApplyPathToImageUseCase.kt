@@ -40,8 +40,8 @@ class ApplyPathToImageUseCaseImpl(
             MediaStore.Images.Media.insertImage(
                 context.contentResolver,
                 bitmap,
-                "modified bitmap",
-                "modified bitmap description"
+                "image_magic_output_bitmap",
+                "image magic modified bitmap description"
             )
         }
 
