@@ -15,7 +15,7 @@ val modifyImageModule = module {
     single<ImagesRepository> { ImagesRepositoryImpl(get()) }
 
     factory<ScaleImageUseCase> { ScaleImageUseCaseImpl(get(), get()) }
-    factory<ApplyPathToImageUseCase> { ApplyPathToImageUseCaseImpl(get()) }
+    factory<ApplyPathToImageUseCase> { ApplyPathToImageUseCaseImpl(get(), get()) }
 
     viewModel { LoadImageViewModel(get()) }
     viewModel { EditImageViewModel(get(), get()) }
