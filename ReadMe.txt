@@ -14,7 +14,7 @@ of motion events and a reference to the next node. A series of nodes, therefore,
 structure.
 
 - The PathModel class stores data about one path: the path color, stroke width as well as first and
-last Node. The PathModel class can add a Node (if it's coordinates are not too close to the
+last Node. The PathModel class can add a Node (if its coordinates are not too close to the
 current last node's).
 
 This class can also "flatten" the nodes tree and return it in a List of Nodes (which may be used for
