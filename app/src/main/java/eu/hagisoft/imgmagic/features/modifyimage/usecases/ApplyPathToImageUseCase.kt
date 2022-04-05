@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.provider.MediaStore
+import android.util.Log
 import eu.hagisoft.imgmagic.features.modifyimage.models.Paths
 import eu.hagisoft.imgmagic.features.modifyimage.repositories.ImagesRepository
 import kotlin.Result.Companion.success

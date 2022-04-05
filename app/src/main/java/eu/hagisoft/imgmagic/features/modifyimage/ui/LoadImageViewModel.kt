@@ -4,8 +4,10 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.hagisoft.imgmagic.features.modifyimage.usecases.ScaleImageUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LoadImageViewModel(private val scaleImageUseCase: ScaleImageUseCase) : ViewModel() {
 
@@ -23,13 +25,15 @@ class LoadImageViewModel(private val scaleImageUseCase: ScaleImageUseCase) : Vie
 
     fun onImageChosen(uri: Uri) {
         viewModelScope.launch {
-            _state.value = ViewState(loading = true)
+            withContext(Dispatchers.Default) {
+                _state.value = ViewState(loading = true)
 
-            runCatching { scaleImageUseCase(uri) }
-                .onSuccess { _events.emit(ViewEvent.GoToImageEdit) }
-                .onFailure { _events.emit(ViewEvent.ImageLoadingError) }
+                runCatching { scaleImageUseCase(uri) }
+                    .onSuccess { _events.emit(ViewEvent.GoToImageEdit) }
+                    .onFailure { _events.emit(ViewEvent.ImageLoadingError) }
 
-            _state.value = ViewState(loading = false)
+                _state.value = ViewState(loading = false)
+            }
         }
     }
 

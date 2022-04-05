@@ -7,9 +7,11 @@ import androidx.lifecycle.viewModelScope
 import eu.hagisoft.imgmagic.features.modifyimage.models.Paths
 import eu.hagisoft.imgmagic.features.modifyimage.repositories.ImagesRepository
 import eu.hagisoft.imgmagic.features.modifyimage.usecases.ApplyPathToImageUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.pow
 
 class EditImageViewModel(
@@ -55,18 +57,20 @@ class EditImageViewModel(
 
     fun performImageSaving(paths: Paths) {
         viewModelScope.launch {
-            setInProgress(true)
+            withContext(Dispatchers.Default) {
+                setInProgress(true)
 
-            runCatching { applyPathToImageUseCase(paths) }
-                .onSuccess {
-                    _events.emit(ViewEvent.ImageSavingSuccess)
-                    _events.emit(ViewEvent.Finish)
-                }
-                .onFailure {
-                    _events.emit(ViewEvent.ImageSavingFailure)
-                }
+                runCatching { applyPathToImageUseCase(paths) }
+                    .onSuccess {
+                        _events.emit(ViewEvent.ImageSavingSuccess)
+                        _events.emit(ViewEvent.Finish)
+                    }
+                    .onFailure {
+                        _events.emit(ViewEvent.ImageSavingFailure)
+                    }
 
-            setInProgress(false)
+                setInProgress(false)
+            }
         }
     }
 
